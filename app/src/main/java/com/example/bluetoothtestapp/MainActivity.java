@@ -26,7 +26,7 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity
 {
-
+    //this is a test
     Button buttonON, buttonOFF, pairedDevicesButton, listenButton;
     TextView isClicked;
     ListView listView;
