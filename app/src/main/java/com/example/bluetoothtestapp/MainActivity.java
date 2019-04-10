@@ -1,5 +1,6 @@
 package com.example.bluetoothtestapp;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity
     });
 
     //method to display whether or not the send signal button has been pressed
+    @SuppressLint("ClickableViewAccessibility")
     private void sendSignal() {
         signalButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
