@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,8 +28,8 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity
 {
     //this is a test
-    Button buttonON, buttonOFF, pairedDevicesButton, listenButton;
-    TextView isClicked;
+    Button buttonON, buttonOFF, pairedDevicesButton, listenButton, signalButton;
+    TextView isClicked, signalRecieved;
     ListView listView;
     BluetoothAdapter myBluetoothAdapter;
     BluetoothDevice[] btArray;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity
         listView = findViewById(R.id.ListView);
         isClicked = findViewById(R.id.isClicked);
         listenButton = findViewById(R.id.listenBtn);
+        signalButton = findViewById(R.id.signalBtn);
+        signalRecieved = findViewById(R.id.recieveSignal);
 
 
         enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+    //starts the bluetooth socket server
     private void listenButton() {
         listenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,21 +81,56 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    Handler handler = new Handler(new Handler.Callback() {
+    //handles displaying if the two devices were able to connect
+    Handler handler1 = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-           isClicked.setText(String.valueOf(msg.arg1));
+            int num = msg.arg1;
+           if (!(num == 0)){
+               isClicked.setText("Connected");
+           }
             return false;
         }
     });
 
+    //handles displaying if the signal is being sent
+    Handler handler2 = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            signalRecieved.setText(String.valueOf(msg.arg1));
+            return false;
+        }
+    });
+
+    //method to display whether or not the send signal button has been pressed
+    private void sendSignal() {
+        signalButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Message message = Message.obtain();
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        message.arg1 = 1;
+                        handler2.sendMessage(message);
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        message.arg1 = 0;
+                        handler2.sendMessage(message);
+                        return true;
+                }
+                return false;
+            }
+        });
+
+    }
+
+    //method to run the connect thread, passes the bluetooth device from an array based on the list view
     private void connectBT() {
        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                ConnectThread connectThread = new ConnectThread(btArray[position]);
                connectThread.start();
-              // Toast.makeText(getApplicationContext(), "connected to other device", Toast.LENGTH_LONG).show();
            }
        });
 
@@ -200,14 +240,14 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 if (socket != null) {
-                    // A connection was accepted. Perform work associated with
-                    //manageMyConnectedSocket(mmSocket);
+                    // A connection was accepted. Send signal manages the task for the app to do
+                    sendSignal();
                     try {
                         mmServerSocket.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    break;
+                    //break;
                 }
             }
         }
@@ -266,7 +306,7 @@ public class MainActivity extends AppCompatActivity
             // the connection in a separate thread.
             Message message = Message.obtain();
             message.arg1 = 1;
-            handler.sendMessage(message);
+            handler1.sendMessage(message);
 
         }
 
