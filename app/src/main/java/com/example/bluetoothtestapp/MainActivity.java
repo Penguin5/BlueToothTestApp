@@ -61,18 +61,19 @@ public class MainActivity extends AppCompatActivity
         //initializing UI
         pairedDevicesButton = findViewById(R.id.showPairedDevicesBtn);
         listView = findViewById(R.id.ListView);
-        selectNotes = findViewById(R.id.SelectNoteList);
+        selectNotes = findViewById(R.id.SelectNotesList);
         listenButton = findViewById(R.id.listenBtn);
         signalButton = findViewById(R.id.signalBtn);
         signalRecieved = findViewById(R.id.recieveSignal);
-        ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{"a", "b", "d", "c"});
-        selectNotes.setAdapter(displayNotes);
+
 
         //initializing bluetooth
         myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 
-        //main logic
+
+        ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{"a", "b", "d", "c"});
+        selectNotes.setAdapter(displayNotes);
         chooseNote();
         executeButton();
         connectBT();
@@ -100,10 +101,8 @@ public class MainActivity extends AppCompatActivity
             int num = msg.arg1;
             if (num == 1){
                 signalRecieved.setText("hello");
-                determineNote(c);
                 mp.setLooping(true);
                 mp.start();
-
             } else {
                 signalRecieved.setText("nothing");
                 mp.pause();

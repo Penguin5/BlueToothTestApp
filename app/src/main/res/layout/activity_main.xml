@@ -78,11 +78,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
         android:layout_marginLeft="22dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/signalBtn"
-        app:layout_constraintStart_toEndOf="@+id/signalBtn" />
+        app:layout_constraintStart_toEndOf="@+id/signalBtn"
+        tools:layout_editor_absoluteY="592dp" />
 
     <ListView
-        android:id="@+id/SelectNoteList"
+        android:id="@+id/SelectNotesList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
