@@ -32,16 +32,20 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity
 {
-    //this is a test
-    Button buttonON, buttonOFF, pairedDevicesButton, listenButton, signalButton;
-    TextView isClicked, signalRecieved;
-    ListView listView;
-    Intent enableBluetoothIntent;
-    int REQUEST_ENABLE_BT;
+    //simple data
+    char c;
 
+    //UI data
+    Button  pairedDevicesButton, listenButton, signalButton;
+    TextView isClicked, signalRecieved;
+    ListView listView, selectNotes;
+    Intent enableBluetoothIntent;
+
+    //bluetooth stuff
     ConnectedThread connectedThread;
     BluetoothAdapter myBluetoothAdapter;
     BluetoothDevice[] btArray;
+
     //media player is for sound
     private MediaPlayer mp;
 
@@ -54,24 +58,22 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        buttonON = findViewById(R.id.btON);
-        buttonOFF = findViewById(R.id.btOFF);
+        //initializing UI
         pairedDevicesButton = findViewById(R.id.showPairedDevicesBtn);
         listView = findViewById(R.id.ListView);
-        isClicked = findViewById(R.id.isClicked);
+        selectNotes = findViewById(R.id.SelectNoteList);
         listenButton = findViewById(R.id.listenBtn);
         signalButton = findViewById(R.id.signalBtn);
         signalRecieved = findViewById(R.id.recieveSignal);
-        mp = MediaPlayer.create(this, R.raw.a);
+        ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{"a", "b", "d", "c"});
+        selectNotes.setAdapter(displayNotes);
 
+        //initializing bluetooth
+        myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        REQUEST_ENABLE_BT = 1;
 
-
-        bluetoothONMethod();
-        bluetoothOFFMethod();
+        //main logic
+        chooseNote();
         executeButton();
         connectBT();
         listenButton();
@@ -98,8 +100,10 @@ public class MainActivity extends AppCompatActivity
             int num = msg.arg1;
             if (num == 1){
                 signalRecieved.setText("hello");
+                determineNote(c);
                 mp.setLooping(true);
                 mp.start();
+
             } else {
                 signalRecieved.setText("nothing");
                 mp.pause();
@@ -107,6 +111,20 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
     });
+
+    //determines the note to play
+    private void determineNote(char note){
+        switch (note){
+            case 'a':
+                mp = MediaPlayer.create(this, R.raw.a);
+            case 'b':
+                mp = MediaPlayer.create(this, R.raw.b);
+            case 'c':
+                mp = MediaPlayer.create(this, R.raw.c);
+            case 'd':
+                mp = MediaPlayer.create(this, R.raw.d);
+        }
+    }
 
     //starts the bluetooth socket server
     private void listenButton() {
@@ -138,6 +156,17 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    //method to select what note to play passed on the list view
+    private void chooseNote(){
+        selectNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String s = selectNotes.getItemAtPosition(position).toString();
+                c = s.charAt(0);
+            }
+        });
     }
 
     //method to run the connect thread, passes the bluetooth device from an array based on the list view
@@ -173,55 +202,6 @@ public class MainActivity extends AppCompatActivity
                     }
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, bondedNames);
                     listView.setAdapter(arrayAdapter);
-                }
-            }
-        });
-    }
-
-    //in charge of notifying the user when they enable bluetooth
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
-    {
-        if (requestCode ==  REQUEST_ENABLE_BT)
-        {
-            if(requestCode == RESULT_OK)
-            {
-                Toast.makeText(getApplicationContext(), "Bluetooth is enabled", Toast.LENGTH_LONG).show();
-            } else if (resultCode == RESULT_CANCELED)
-            {
-                Toast.makeText(getApplicationContext(), "Bluetooth enabling was cancel", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    //method that controls turning the bluetooth on
-    private void bluetoothONMethod()
-    {
-        buttonON.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(myBluetoothAdapter == null){
-                    //bluetooth is not supported
-                    Toast.makeText(getApplicationContext(), "Bluetooth is not supported on this Device", Toast.LENGTH_LONG).show();
-                } else{
-                    //check if device has bluetooth disabled, if it does, run code in the brackets
-                    if(!myBluetoothAdapter.isEnabled()){
-                        //enables bluetooth
-
-                        startActivityForResult(enableBluetoothIntent, REQUEST_ENABLE_BT);
-                    }
-                }
-            }
-        });
-    }
-
-    //method that controls turning the bluetooth off
-    private void bluetoothOFFMethod() {
-        buttonOFF.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(myBluetoothAdapter.isEnabled()){
-                    myBluetoothAdapter.disable();
                 }
             }
         });
