@@ -1,5 +1,6 @@
 package com.example.bluetoothtestapp;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
@@ -10,6 +11,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +21,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -31,10 +35,13 @@ public class MainActivity extends AppCompatActivity
     Button buttonON, buttonOFF, pairedDevicesButton, listenButton, signalButton;
     TextView isClicked, signalRecieved;
     ListView listView;
-    BluetoothAdapter myBluetoothAdapter;
-    BluetoothDevice[] btArray;
     Intent enableBluetoothIntent;
     int REQUEST_ENABLE_BT;
+
+    ConnectedThread connectedThread;
+    BluetoothAdapter myBluetoothAdapter;
+    BluetoothDevice[] btArray;
+
 
     private static final UUID myUUID =
             UUID.fromString("9fa718be-5b37-11e9-8647-d663bd873d93");
@@ -65,10 +72,35 @@ public class MainActivity extends AppCompatActivity
         executeButton();
         connectBT();
         listenButton();
-
+        sendSignal();
 
     }
 
+    //handles displaying if the two devices were able to connect
+    Handler handler1 = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            int num = msg.arg1;
+            if (!(num == 0)){
+               isClicked.setText("Connected");
+           }
+            return false;
+        }
+    });
+
+    //handles displaying if the signal is being sent
+    Handler handler2 = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            int num = msg.arg1;
+            if (num == 1){
+                signalRecieved.setText("hello");
+            } else {
+                signalRecieved.setText("nothing");
+            }
+            return false;
+        }
+    });
 
     //starts the bluetooth socket server
     private void listenButton() {
@@ -81,41 +113,19 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    //handles displaying if the two devices were able to connect
-    Handler handler1 = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            int num = msg.arg1;
-           if (!(num == 0)){
-               isClicked.setText("Connected");
-           }
-            return false;
-        }
-    });
-
-    //handles displaying if the signal is being sent
-    Handler handler2 = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            signalRecieved.setText(String.valueOf(msg.arg1));
-            return false;
-        }
-    });
-
-    //method to display whether or not the send signal button has been pressed
+    //method to send data from one device to another
+    @SuppressLint("ClickableViewAccessibility")
     private void sendSignal() {
         signalButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Message message = Message.obtain();
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        message.arg1 = 1;
-                        handler2.sendMessage(message);
+                        connectedThread.write(true);
+                        Log.d("AppInfo", "Button held down");
                         return true;
                     case MotionEvent.ACTION_UP:
-                        message.arg1 = 0;
-                        handler2.sendMessage(message);
+                        connectedThread.write(false);
                         return true;
                 }
                 return false;
@@ -136,14 +146,14 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
     //in charge of listing previously paired devices
     private void executeButton() {
               pairedDevicesButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Set<BluetoothDevice> bondedDevices = myBluetoothAdapter.getBondedDevices();
-                        String[] bondedNames = new String[bondedDevices.size()];
+                Log.d("AppInfo", "clicked Show Paired Devices");
+                Set<BluetoothDevice> bondedDevices = myBluetoothAdapter.getBondedDevices();
+                String[] bondedNames = new String[bondedDevices.size()];
                 btArray = new BluetoothDevice[bondedDevices.size()];
                 int index = 0;
 
@@ -241,7 +251,9 @@ public class MainActivity extends AppCompatActivity
 
                 if (socket != null) {
                     // A connection was accepted. Send signal manages the task for the app to do
-                    sendSignal();
+                    connectedThread = new ConnectedThread(socket);
+                    connectedThread.start();
+
                     try {
                         mmServerSocket.close();
                     } catch (IOException e) {
@@ -308,6 +320,8 @@ public class MainActivity extends AppCompatActivity
             message.arg1 = 1;
             handler1.sendMessage(message);
 
+            connectedThread = new ConnectedThread(mmSocket);
+            connectedThread.start();
         }
 
         // Closes the client socket and causes the thread to finish.
@@ -319,4 +333,82 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
+    //methods in charge of sending and receiving data
+    private class ConnectedThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final DataInputStream mmInStream;
+        private final DataOutputStream mmOutStream;
+
+        public ConnectedThread(BluetoothSocket socket) {
+            mmSocket = socket;
+            DataInputStream tmpIn = null;
+            DataOutputStream tmpOut = null;
+
+            // Get the input and output streams; using temp objects because
+            // member streams are final.
+            try {
+                tmpIn = new DataInputStream(socket.getInputStream());
+            } catch (IOException e) {
+               e.printStackTrace();
+            }
+            try {
+                tmpOut = new DataOutputStream(socket.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mmInStream = tmpIn;
+            mmOutStream = tmpOut;
+
+        }
+
+        public void run() {
+            boolean stateOfButton;
+            int tempNum;
+            // Keep listening to the InputStream until an exception occurs.
+            while (true) {
+                try {
+                    // Read from the InputStream.
+                    stateOfButton = mmInStream.readBoolean();
+                    if(stateOfButton){
+                        Log.d("AppInfo", "Button Being read as true");
+                       tempNum = 1;
+                    } else {
+                        tempNum = 0;
+                        Log.d("AppInfo", "Button Being read as false");
+                    }
+
+                    // Send the obtained bytes to the UI activity.
+                    Message message = Message.obtain();
+                    message.arg1 = tempNum;
+                    handler2.sendMessage(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+        }
+
+        // Call this from the main activity to send data to the remote device.
+        public void write(boolean bool) {
+            try {
+                Log.d("AppInfo", "button being sent as" + String.valueOf(bool));
+                mmOutStream.writeBoolean(bool);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Call this method from the main activity to shut down the connection.
+        public void cancel() {
+            try {
+                mmSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }
+
