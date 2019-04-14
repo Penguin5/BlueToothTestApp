@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity
     ConnectedThread connectedThread;
     BluetoothAdapter myBluetoothAdapter;
     BluetoothDevice[] btArray;
+    //media player is for sound
+    private MediaPlayer mp;
 
 
     private static final UUID myUUID =
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         listenButton = findViewById(R.id.listenBtn);
         signalButton = findViewById(R.id.signalBtn);
         signalRecieved = findViewById(R.id.recieveSignal);
-
+        mp = MediaPlayer.create(this, R.raw.a);
 
         enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         REQUEST_ENABLE_BT = 1;
@@ -95,8 +98,11 @@ public class MainActivity extends AppCompatActivity
             int num = msg.arg1;
             if (num == 1){
                 signalRecieved.setText("hello");
+                mp.setLooping(true);
+                mp.start();
             } else {
                 signalRecieved.setText("nothing");
+                mp.pause();
             }
             return false;
         }
@@ -165,7 +171,7 @@ public class MainActivity extends AppCompatActivity
                         btArray[index] = device;
                         index ++;
                     }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, bondedNames);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, bondedNames);
                     listView.setAdapter(arrayAdapter);
                 }
             }
