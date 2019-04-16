@@ -33,7 +33,7 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity
 {
     //simple data
-    char c;
+    char c ='a';
 
     //UI data
     Button  pairedDevicesButton, listenButton, signalButton;
@@ -47,8 +47,10 @@ public class MainActivity extends AppCompatActivity
     BluetoothDevice[] btArray;
 
     //media player is for sound
-    private MediaPlayer mp;
-
+    private MediaPlayer mpA;
+    private MediaPlayer mpB;
+    private MediaPlayer mpC;
+    private MediaPlayer mpD;
 
     private static final UUID myUUID =
             UUID.fromString("9fa718be-5b37-11e9-8647-d663bd873d93");
@@ -65,14 +67,24 @@ public class MainActivity extends AppCompatActivity
         listenButton = findViewById(R.id.listenBtn);
         signalButton = findViewById(R.id.signalBtn);
         signalRecieved = findViewById(R.id.recieveSignal);
+        isClicked = findViewById(R.id.isClicked);
 
 
         //initializing bluetooth
         myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 
+        //intializing mediaplayer
+         mpA = MediaPlayer.create(this, R.raw.a);;
+         mpA.setLooping(true);
+         mpB = MediaPlayer.create(this, R.raw.b);;
+         mpB.setLooping(true);
+         mpC = MediaPlayer.create(this, R.raw.c);;
+         mpC.setLooping(true);
+         mpD = MediaPlayer.create(this, R.raw.d);;
+         mpD.setLooping(true);
 
-        ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{"a", "b", "d", "c"});
+        ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{"a", "b", "c", "d"});
         selectNotes.setAdapter(displayNotes);
         chooseNote();
         executeButton();
@@ -101,11 +113,22 @@ public class MainActivity extends AppCompatActivity
             int num = msg.arg1;
             if (num == 1){
                 signalRecieved.setText("hello");
-                mp.setLooping(true);
-                mp.start();
+                determineNote(c);
             } else {
                 signalRecieved.setText("nothing");
-                mp.pause();
+                if(mpA.isPlaying()) {
+                    mpA.pause();
+                }
+                if(mpB.isPlaying()) {
+                    mpB.pause();
+                }
+                if(mpC.isPlaying()) {
+                    mpC.pause();
+                }
+                if(mpD.isPlaying()) {
+                    mpD.pause();
+                }
+
             }
             return false;
         }
@@ -113,15 +136,18 @@ public class MainActivity extends AppCompatActivity
 
     //determines the note to play
     private void determineNote(char note){
-        switch (note){
-            case 'a':
-                mp = MediaPlayer.create(this, R.raw.a);
-            case 'b':
-                mp = MediaPlayer.create(this, R.raw.b);
-            case 'c':
-                mp = MediaPlayer.create(this, R.raw.c);
-            case 'd':
-                mp = MediaPlayer.create(this, R.raw.d);
+        if (note == 'a') {
+            mpA.start();
+            Log.d("AppInfo", "a is playing");
+        }else if (note == 'b'){
+            mpB.start();
+            Log.d("AppInfo", "b is playing");
+        }else if (note == 'c'){
+            mpC.start();
+            Log.d("AppInfo", "c is playing");
+        }else if (note == 'd'){
+            mpD.start();
+            Log.d("AppInfo", "song is playing");
         }
     }
 
@@ -146,6 +172,7 @@ public class MainActivity extends AppCompatActivity
                     case MotionEvent.ACTION_DOWN:
                         connectedThread.write(true);
                         Log.d("AppInfo", "Button held down");
+                        Log.d("AppInfo", String.valueOf(c));
                         return true;
                     case MotionEvent.ACTION_UP:
                         connectedThread.write(false);
@@ -164,6 +191,7 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String s = selectNotes.getItemAtPosition(position).toString();
                 c = s.charAt(0);
+                Log.d("AppInfo", s);
             }
         });
     }
@@ -356,11 +384,9 @@ public class MainActivity extends AppCompatActivity
                     // Read from the InputStream.
                     stateOfButton = mmInStream.readBoolean();
                     if(stateOfButton){
-                        Log.d("AppInfo", "Button Being read as true");
                        tempNum = 1;
                     } else {
                         tempNum = 0;
-                        Log.d("AppInfo", "Button Being read as false");
                     }
 
                     // Send the obtained bytes to the UI activity.
