@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Base64;
 import java.util.Set;
 import java.util.UUID;
 
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity
     private MediaPlayer mpD;
 
     private static final UUID myUUID =
-            UUID.fromString("9fa718be-5b37-11e9-8647-d663bd873d93");
+            UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity
          mpB.setLooping(true);
          mpC = MediaPlayer.create(this, R.raw.c);;
          mpC.setLooping(true);
-         mpD = MediaPlayer.create(this, R.raw.d);;
+         mpD = MediaPlayer.create(this, R.raw.d);
          mpD.setLooping(true);
 
         ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{"a", "b", "c", "d"});
@@ -376,30 +378,32 @@ public class MainActivity extends AppCompatActivity
         }
 
         public void run() {
+            byte[] buffer = new byte[1024];  // buffer store for the stream
+            int bytes; // bytes returned from read()
             boolean stateOfButton;
             int tempNum;
             // Keep listening to the InputStream until an exception occurs.
             while (true) {
                 try {
                     // Read from the InputStream.
-                    stateOfButton = mmInStream.readBoolean();
-                    if(stateOfButton){
-                       tempNum = 1;
-                    } else {
-                        tempNum = 0;
-                    }
+                    bytes = mmInStream.available();
+                    if (bytes != 0) {
+                        SystemClock.sleep(100); //pause and wait for rest of data. Adjust this depending on your sending speed.
+                        bytes = mmInStream.available(); // how many bytes are ready to be read?
+                        bytes = mmInStream.read(buffer, 0, bytes); // record how many bytes we actually read
+                        Log.d("AppInfo", String.valueOf(new String(buffer, "UTF-8").charAt(0)));
+                        tempNum = Character.getNumericValue(new String(buffer, "UTF-8").charAt(0));
 
-                    // Send the obtained bytes to the UI activity.
-                    Message message = Message.obtain();
-                    message.arg1 = tempNum;
-                    handler2.sendMessage(message);
+                        Message message = Message.obtain();
+                        message.arg1 = tempNum;
+                        handler2.sendMessage(message);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                     break;
                 }
             }
         }
-
         // Call this from the main activity to send data to the remote device.
         public void write(boolean bool) {
             try {
