@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -21,14 +22,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Base64;
 import java.util.Set;
 import java.util.UUID;
 
@@ -49,11 +47,7 @@ public class MainActivity extends AppCompatActivity
     BluetoothDevice[] btArray;
 
     //media player is for sound
-    private MediaPlayer mpA;
-    private MediaPlayer mpB;
-    private MediaPlayer mpC;
-    private MediaPlayer mpD;
-
+    Context context = this;
     private static final UUID myUUID =
             UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
@@ -77,14 +71,6 @@ public class MainActivity extends AppCompatActivity
         enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 
         //intializing mediaplayer
-         mpA = MediaPlayer.create(this, R.raw.a);;
-         mpA.setLooping(true);
-         mpB = MediaPlayer.create(this, R.raw.b);;
-         mpB.setLooping(true);
-         mpC = MediaPlayer.create(this, R.raw.c);;
-         mpC.setLooping(true);
-         mpD = MediaPlayer.create(this, R.raw.d);
-         mpD.setLooping(true);
 
         ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{"a", "b", "c", "d"});
         selectNotes.setAdapter(displayNotes);
@@ -109,35 +95,41 @@ public class MainActivity extends AppCompatActivity
     });
 
     //handles displaying if the signal is being sent
+    //not being used currently
     Handler handler2 = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             int num = msg.arg1;
-            if (num == 1){
-                signalRecieved.setText("hello");
-                determineNote(c);
-            } else {
-                signalRecieved.setText("nothing");
-                if(mpA.isPlaying()) {
-                    mpA.pause();
-                }
-                if(mpB.isPlaying()) {
-                    mpB.pause();
-                }
-                if(mpC.isPlaying()) {
-                    mpC.pause();
-                }
-                if(mpD.isPlaying()) {
-                    mpD.pause();
-                }
-
-            }
+           // playNote(num);
             return false;
         }
     });
 
+    //plays the determined note
+    private void playNote(int num, MediaPlayer mpA, MediaPlayer mpB, MediaPlayer mpC, MediaPlayer mpD){
+
+        if (num == 1){
+            determineNote(c, mpA, mpB, mpC, mpD);
+        } else {
+            if(mpA.isPlaying()) {
+                mpA.pause();
+            }
+            if(mpB.isPlaying()) {
+                mpB.pause();
+            }
+            if(mpC.isPlaying()) {
+                mpC.pause();
+            }
+            if(mpD.isPlaying()) {
+                mpD.pause();
+            }
+
+        }
+    }
+
     //determines the note to play
-    private void determineNote(char note){
+    //needs to be edited for multiple devices
+    private void determineNote(char note, MediaPlayer mpA, MediaPlayer mpB, MediaPlayer mpC, MediaPlayer mpD){
         if (note == 'a') {
             mpA.start();
             Log.d("AppInfo", "a is playing");
@@ -172,12 +164,12 @@ public class MainActivity extends AppCompatActivity
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        connectedThread.write(true);
+                        connectedThread.write("100".getBytes());
                         Log.d("AppInfo", "Button held down");
                         Log.d("AppInfo", String.valueOf(c));
                         return true;
                     case MotionEvent.ACTION_UP:
-                        connectedThread.write(false);
+                        connectedThread.write("000".getBytes());
                         return true;
                 }
                 return false;
@@ -328,7 +320,6 @@ public class MainActivity extends AppCompatActivity
                 }
                 return;
             }
-
             // The connection attempt succeeded. Perform work associated with
             // the connection in a separate thread.
             Message message = Message.obtain();
@@ -382,6 +373,20 @@ public class MainActivity extends AppCompatActivity
             int bytes; // bytes returned from read()
             boolean stateOfButton;
             int tempNum;
+            MediaPlayer mpA;
+            MediaPlayer mpB;
+            MediaPlayer mpC;
+            MediaPlayer mpD;
+
+            mpA = MediaPlayer.create(context, R.raw.a);;
+            mpA.setLooping(true);
+            mpB = MediaPlayer.create(context, R.raw.b);;
+            mpB.setLooping(true);
+            mpC = MediaPlayer.create(context, R.raw.c);;
+            mpC.setLooping(true);
+            mpD = MediaPlayer.create(context, R.raw.d);
+            mpD.setLooping(true);
+
             // Keep listening to the InputStream until an exception occurs.
             while (true) {
                 try {
@@ -391,12 +396,17 @@ public class MainActivity extends AppCompatActivity
                         SystemClock.sleep(100); //pause and wait for rest of data. Adjust this depending on your sending speed.
                         bytes = mmInStream.available(); // how many bytes are ready to be read?
                         bytes = mmInStream.read(buffer, 0, bytes); // record how many bytes we actually read
+
+                        //a bunch of stuff that takes the data and gets numeric value of the first character,
+                        // which is either a zero or one
                         Log.d("AppInfo", String.valueOf(new String(buffer, "UTF-8").charAt(0)));
                         tempNum = Character.getNumericValue(new String(buffer, "UTF-8").charAt(0));
 
-                        Message message = Message.obtain();
+                        playNote(tempNum, mpA, mpB, mpC, mpD);
+
+                       /* Message message = Message.obtain();
                         message.arg1 = tempNum;
-                        handler2.sendMessage(message);
+                        */
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -405,10 +415,9 @@ public class MainActivity extends AppCompatActivity
             }
         }
         // Call this from the main activity to send data to the remote device.
-        public void write(boolean bool) {
+        public void write(byte[] bytes) {
             try {
-                Log.d("AppInfo", "button being sent as" + String.valueOf(bool));
-                mmOutStream.writeBoolean(bool);
+                mmOutStream.write(bytes);
             } catch (IOException e) {
                 e.printStackTrace();
             }
