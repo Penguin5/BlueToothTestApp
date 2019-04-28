@@ -11,7 +11,6 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,20 +26,23 @@ import android.widget.TextView;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity
 {
     //simple data
-    char c ='a';
-
+    Globals g;
+    int  i = -1;
+    ArrayList<String> deviceNames = new ArrayList<>();
     //UI data
     Button  pairedDevicesButton, listenButton, signalButton;
     TextView isClicked, signalRecieved;
-    ListView listView, selectNotes;
+    ListView listView, editSwitches;
     Intent enableBluetoothIntent;
-
+    Intent intent;
     //bluetooth stuff
     ConnectedThread connectedThread;
     BluetoothAdapter myBluetoothAdapter;
@@ -56,10 +58,12 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //initializing globals
+        g = Globals.getInstance();
         //initializing UI
         pairedDevicesButton = findViewById(R.id.showPairedDevicesBtn);
         listView = findViewById(R.id.ListView);
-        selectNotes = findViewById(R.id.SelectNotesList);
+        editSwitches = findViewById(R.id.editSwitches);
         listenButton = findViewById(R.id.listenBtn);
         signalButton = findViewById(R.id.signalBtn);
         signalRecieved = findViewById(R.id.recieveSignal);
@@ -70,15 +74,16 @@ public class MainActivity extends AppCompatActivity
         myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 
-        //intializing mediaplayer
+        //intializing intent
+        intent = new Intent(context, NoteListActivity.class);
 
-        ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{"a", "b", "c", "d"});
-        selectNotes.setAdapter(displayNotes);
-        chooseNote();
+
+
         executeButton();
         connectBT();
         listenButton();
         sendSignal();
+        openSelectNotesAct();
 
     }
 
@@ -89,6 +94,7 @@ public class MainActivity extends AppCompatActivity
             int num = msg.arg1;
             if (!(num == 0)){
                isClicked.setText("Connected");
+               listPairedDevices();
            }
             return false;
         }
@@ -106,7 +112,7 @@ public class MainActivity extends AppCompatActivity
     });
 
     //plays the determined note
-    private void playNote(int num, MediaPlayer mpA, MediaPlayer mpB, MediaPlayer mpC, MediaPlayer mpD){
+    private void playNote(int num, MediaPlayer mpA, MediaPlayer mpB, MediaPlayer mpC, MediaPlayer mpD, char c){
 
         if (num == 1){
             determineNote(c, mpA, mpB, mpC, mpD);
@@ -166,7 +172,6 @@ public class MainActivity extends AppCompatActivity
                     case MotionEvent.ACTION_DOWN:
                         connectedThread.write("100".getBytes());
                         Log.d("AppInfo", "Button held down");
-                        Log.d("AppInfo", String.valueOf(c));
                         return true;
                     case MotionEvent.ACTION_UP:
                         connectedThread.write("000".getBytes());
@@ -178,16 +183,23 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    //method to select what note to play passed on the list view
-    private void chooseNote(){
-        selectNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String s = selectNotes.getItemAtPosition(position).toString();
-                c = s.charAt(0);
-                Log.d("AppInfo", s);
-            }
-        });
+    //method that lists all the currently paired devices
+    private void listPairedDevices (){
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, deviceNames);
+        editSwitches.setAdapter(arrayAdapter);
+    }
+
+
+   //method to open up new activity that manages what note to play for each device
+   private void openSelectNotesAct(){
+            editSwitches.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    startActivity(intent);
+                    intent.putExtra("pos", position);
+                }
+            });
+
     }
 
     //method to run the connect thread, passes the bluetooth device from an array based on the list view
@@ -258,7 +270,7 @@ public class MainActivity extends AppCompatActivity
 
                 if (socket != null) {
                     // A connection was accepted. Send signal manages the task for the app to do
-                    connectedThread = new ConnectedThread(socket);
+                    connectedThread = new ConnectedThread(socket, 1);
                     connectedThread.start();
 
                     try {
@@ -285,7 +297,7 @@ public class MainActivity extends AppCompatActivity
     private class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final BluetoothDevice mmDevice;
-
+        private String nameOfDevice;
 
         public ConnectThread(BluetoothDevice device) {
             // Use a temporary object that is later assigned to mmSocket
@@ -297,6 +309,7 @@ public class MainActivity extends AppCompatActivity
                 // Get a BluetoothSocket to connect with the given BluetoothDevice.
                 // MY_UUID is the app's UUID string, also used in the server code.
                 tmp = device.createRfcommSocketToServiceRecord(myUUID);
+                nameOfDevice = device.getName();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -322,11 +335,14 @@ public class MainActivity extends AppCompatActivity
             }
             // The connection attempt succeeded. Perform work associated with
             // the connection in a separate thread.
+            i = i +1;
+            deviceNames.add(nameOfDevice);
+
             Message message = Message.obtain();
             message.arg1 = 1;
             handler1.sendMessage(message);
 
-            connectedThread = new ConnectedThread(mmSocket);
+            connectedThread = new ConnectedThread(mmSocket, i);
             connectedThread.start();
         }
 
@@ -345,12 +361,13 @@ public class MainActivity extends AppCompatActivity
         private final BluetoothSocket mmSocket;
         private final DataInputStream mmInStream;
         private final DataOutputStream mmOutStream;
-
-        public ConnectedThread(BluetoothSocket socket) {
+        int localI;
+        public ConnectedThread(BluetoothSocket socket, int num) {
             mmSocket = socket;
             DataInputStream tmpIn = null;
             DataOutputStream tmpOut = null;
 
+            localI = num;
             // Get the input and output streams; using temp objects because
             // member streams are final.
             try {
@@ -371,20 +388,24 @@ public class MainActivity extends AppCompatActivity
         public void run() {
             byte[] buffer = new byte[1024];  // buffer store for the stream
             int bytes; // bytes returned from read()
-            boolean stateOfButton;
+
+
             int tempNum;
+            char charToUse;
+
             MediaPlayer mpA;
             MediaPlayer mpB;
             MediaPlayer mpC;
             MediaPlayer mpD;
 
-            mpA = MediaPlayer.create(context, R.raw.a);;
+
+            mpA = MediaPlayer.create(context, R.raw.a);
             mpA.setLooping(true);
-            mpB = MediaPlayer.create(context, R.raw.b);;
+            mpB = MediaPlayer.create(context, R.raw.b);
             mpB.setLooping(true);
-            mpC = MediaPlayer.create(context, R.raw.c);;
+            mpC = MediaPlayer.create(context, R.raw.c);
             mpC.setLooping(true);
-            mpD = MediaPlayer.create(context, R.raw.d);
+            mpD = MediaPlayer.create(context, R.raw.song);
             mpD.setLooping(true);
 
             // Keep listening to the InputStream until an exception occurs.
@@ -399,14 +420,15 @@ public class MainActivity extends AppCompatActivity
 
                         //a bunch of stuff that takes the data and gets numeric value of the first character,
                         // which is either a zero or one
-                        Log.d("AppInfo", String.valueOf(new String(buffer, "UTF-8").charAt(0)));
                         tempNum = Character.getNumericValue(new String(buffer, "UTF-8").charAt(0));
+                        charToUse = g.getCharAtIndex(localI);
+                        Log.d("AppInfo", String.valueOf(new String(buffer, "UTF-8").charAt(0)));
+                        Log.d("AppInfo", "Playing at an index of " + localI);
+                        Log.d("AppInfo", "Sending a " + String.valueOf(charToUse));
+                        Log.d("AppInfo", "Main array is " + Arrays.toString(g.getCharArr()));
+                        playNote(tempNum, mpA, mpB, mpC, mpD, charToUse);
 
-                        playNote(tempNum, mpA, mpB, mpC, mpD);
 
-                       /* Message message = Message.obtain();
-                        message.arg1 = tempNum;
-                        */
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

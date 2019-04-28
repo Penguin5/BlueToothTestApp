@@ -6,33 +6,61 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <EditText
+        android:id="@+id/selectNoteTitle2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        android:selectAllOnFocus="false"
+        android:text="Edit Switches"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/editSwitches"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ListView
+        android:id="@+id/editSwitches"
+        android:layout_width="0dp"
+        android:layout_height="185dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="396dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/listenBtn" />
+
     <ListView
         android:id="@+id/ListView"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="185dp"
         android:layout_marginStart="11dp"
         android:layout_marginLeft="11dp"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="72dp"
         android:layout_marginEnd="11dp"
         android:layout_marginRight="11dp"
-        android:layout_marginBottom="48dp"
         android:background="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/SelectNoteTitle"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/listenBtn" />
 
     <Button
         android:id="@+id/showPairedDevicesBtn"
-        android:layout_width="186dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="11dp"
         android:layout_marginLeft="11dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:text="Show Paired Devices"
-        app:layout_constraintBottom_toTopOf="@+id/ListView"
         app:layout_constraintEnd_toStartOf="@+id/listenBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,86 +69,42 @@
         android:id="@+id/isClicked"
         android:layout_width="0dp"
         android:layout_height="25dp"
-        android:layout_marginTop="30dp"
         android:layout_marginEnd="6dp"
         android:layout_marginRight="6dp"
-        android:layout_marginBottom="7dp"
-        app:layout_constraintBottom_toTopOf="@+id/ListView"
+        app:layout_constraintBaseline_toBaselineOf="@+id/listenBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/listenBtn"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/listenBtn" />
 
     <Button
         android:id="@+id/listenBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="221dp"
-        android:layout_marginLeft="221dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="Listen"
         app:layout_constraintEnd_toStartOf="@+id/isClicked"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/showPairedDevicesBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/signalBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:layout_marginLeft="7dp"
-        android:layout_marginBottom="106dp"
+        android:layout_marginBottom="16dp"
         android:text="Send Signal"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/recieveSignal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
-        android:layout_marginLeft="22dp"
-        android:layout_marginTop="592dp"
-        android:layout_marginEnd="270dp"
-        android:layout_marginRight="270dp"
-        android:layout_marginBottom="120dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/signalBtn"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ListView
-        android:id="@+id/SelectNotesList"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="12dp"
-        android:background="@color/colorAccent"
+        android:layout_marginEnd="9dp"
+        android:layout_marginRight="9dp"
+        android:layout_marginBottom="56dp"
         app:layout_constraintBottom_toTopOf="@+id/signalBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SelectNoteTitle" />
-
-    <EditText
-        android:id="@+id/SelectNoteTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="329dp"
-        android:layout_marginBottom="328dp"
-        android:ems="10"
-        android:gravity="center"
-        android:inputType="textPersonName"
-        android:selectAllOnFocus="false"
-        android:text="Select The Note"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/isClicked" />
+        app:layout_constraintEnd_toStartOf="@+id/signalBtn" />
 
 </android.support.constraint.ConstraintLayout>
