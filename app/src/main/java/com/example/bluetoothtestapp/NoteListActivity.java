@@ -15,6 +15,7 @@ public class NoteListActivity extends AppCompatActivity {
     ListView selectNotes;
     int pos;
     Globals g;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +28,8 @@ public class NoteListActivity extends AppCompatActivity {
 
         ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{"a", "b", "c", "d"});
         selectNotes.setAdapter(displayNotes);
-        ChooseNote();
         ExtractData();
+        ChooseNote();
 
     }
 
@@ -37,11 +38,15 @@ public class NoteListActivity extends AppCompatActivity {
         selectNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 String s = selectNotes.getItemAtPosition(position).toString();
                 g.setCharAtIndex(pos, s.charAt(0));
-                Log.d("AppInfo", "set to a " + s);
-                Log.d("AppInfo", "actually is a " + String.valueOf(g.getCharAtIndex(position)));
+                Log.d("AppInfo", "set to  " + s);
+                Log.d("AppInfo", "actually is a " + String.valueOf(g.getCharAtIndex(pos)));
+
+
                 Log.d("AppInfo", "NoteList array is " + Arrays.toString(g.getCharArr()));
+
 
             }
         });
@@ -49,6 +54,7 @@ public class NoteListActivity extends AppCompatActivity {
 
     private void ExtractData(){
         Intent intent = getIntent();
-        pos = intent.getIntExtra("pos", 0);
+        pos = intent.getIntExtra("sentPos", 6);
+        Log.d("AppInfo", "The position being changed is " + pos);
     }
 }

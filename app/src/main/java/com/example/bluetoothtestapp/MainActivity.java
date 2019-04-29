@@ -194,9 +194,10 @@ public class MainActivity extends AppCompatActivity
    private void openSelectNotesAct(){
             editSwitches.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemClick(AdapterView<?> parent, View view, int indexBeingSent, long id) {
+                    Log.d("AppInfo", "Position being sent is " + indexBeingSent);
+                    intent.putExtra("sentPos", indexBeingSent);
                     startActivity(intent);
-                    intent.putExtra("pos", position);
                 }
             });
 
@@ -336,6 +337,7 @@ public class MainActivity extends AppCompatActivity
             // The connection attempt succeeded. Perform work associated with
             // the connection in a separate thread.
             i = i +1;
+            Log.d("AppInfo", "The index being used is " + i);
             deviceNames.add(nameOfDevice);
 
             Message message = Message.obtain();
@@ -424,8 +426,8 @@ public class MainActivity extends AppCompatActivity
                         charToUse = g.getCharAtIndex(localI);
                         Log.d("AppInfo", String.valueOf(new String(buffer, "UTF-8").charAt(0)));
                         Log.d("AppInfo", "Playing at an index of " + localI);
-                        Log.d("AppInfo", "Sending a " + String.valueOf(charToUse));
-                        Log.d("AppInfo", "Main array is " + Arrays.toString(g.getCharArr()));
+                        Log.d("AppInfo", "playing note: " + String.valueOf(charToUse));
+
                         playNote(tempNum, mpA, mpB, mpC, mpD, charToUse);
 
 
