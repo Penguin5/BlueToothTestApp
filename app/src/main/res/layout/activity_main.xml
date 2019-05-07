@@ -24,7 +24,7 @@
         app:fontFamily="serif"
         app:layout_constraintBottom_toTopOf="@+id/editSwitches"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.087"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ListView" />
 
@@ -32,17 +32,15 @@
         android:id="@+id/switchChoirTitle"
         android:layout_width="185dp"
         android:layout_height="98dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginLeft="58dp"
-        android:layout_marginTop="49dp"
-        android:layout_marginBottom="22dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="132dp"
         android:gravity="center"
-        android:text="Add Switches"
+        android:text="Add Switches:"
         android:textColor="@color/colorAccent"
         android:textSize="24sp"
         android:typeface="serif"
         app:fontFamily="serif"
-        app:layout_constraintBottom_toTopOf="@+id/showPairedDevicesBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,26 +79,22 @@
     <Button
         android:id="@+id/showPairedDevicesBtn"
         android:layout_width="154dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginLeft="58dp"
-        android:layout_marginTop="31dp"
-        android:layout_marginBottom="7dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="20dp"
         android:text="Show Paired Devices"
-        app:layout_constraintBottom_toTopOf="@+id/ListView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchChoirTitle" />
+        app:layout_constraintStart_toEndOf="@+id/switchChoirTitle"
+        app:layout_constraintTop_toBottomOf="@+id/SwitchChoirTitle" />
 
     <TextView
         android:id="@+id/SwitchChoirTitle"
-        android:layout_width="247dp"
-        android:layout_height="178dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginLeft="52dp"
-        android:layout_marginTop="49dp"
-        android:layout_marginEnd="58dp"
-        android:layout_marginRight="58dp"
-        android:layout_marginBottom="24dp"
+        android:layout_width="512dp"
+        android:layout_height="140dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginRight="44dp"
         android:gravity="center"
         android:text="Switch Choir"
         android:textColor="@color/colorAccent"
@@ -108,11 +102,9 @@
         android:textStyle="bold"
         android:typeface="serif"
         app:fontFamily="cursive"
-        app:layout_constraintBottom_toTopOf="@+id/ListView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/switchChoirTitle"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

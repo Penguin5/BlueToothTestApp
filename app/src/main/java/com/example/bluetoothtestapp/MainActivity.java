@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity
             mpB.setLooping(true);
             mpC = MediaPlayer.create(context, R.raw.c);
             mpC.setLooping(true);
-            mpD = MediaPlayer.create(context, R.raw.song);
+            mpD = MediaPlayer.create(context, R.raw.d);
             mpD.setLooping(true);
 
             // Keep listening to the InputStream until an exception occurs.
