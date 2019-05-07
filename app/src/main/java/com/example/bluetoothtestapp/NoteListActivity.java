@@ -54,7 +54,7 @@ public class NoteListActivity extends AppCompatActivity {
 
     private void ExtractData(){
         Intent intent = getIntent();
-        pos = intent.getIntExtra("sentPos", 6);
+        pos = intent.getIntExtra("sentPos", 0);
         Log.d("AppInfo", "The position being changed is " + pos);
     }
 }

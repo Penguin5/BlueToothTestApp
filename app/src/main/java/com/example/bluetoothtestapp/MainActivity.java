@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity
     int  i = -1;
     ArrayList<String> deviceNames = new ArrayList<>();
     //UI data
-    Button  pairedDevicesButton, listenButton, signalButton;
-    TextView isClicked, signalRecieved;
+    Button  pairedDevicesButton;
     ListView listView, editSwitches;
     Intent enableBluetoothIntent;
     Intent intent;
@@ -64,10 +63,7 @@ public class MainActivity extends AppCompatActivity
         pairedDevicesButton = findViewById(R.id.showPairedDevicesBtn);
         listView = findViewById(R.id.ListView);
         editSwitches = findViewById(R.id.editSwitches);
-        listenButton = findViewById(R.id.listenBtn);
-        signalButton = findViewById(R.id.signalBtn);
-        signalRecieved = findViewById(R.id.recieveSignal);
-        isClicked = findViewById(R.id.isClicked);
+
 
 
         //initializing bluetooth
@@ -81,8 +77,6 @@ public class MainActivity extends AppCompatActivity
 
         executeButton();
         connectBT();
-        listenButton();
-        sendSignal();
         openSelectNotesAct();
 
     }
@@ -93,7 +87,6 @@ public class MainActivity extends AppCompatActivity
         public boolean handleMessage(Message msg) {
             int num = msg.arg1;
             if (!(num == 0)){
-               isClicked.setText("Connected");
                listPairedDevices();
            }
             return false;
@@ -119,15 +112,19 @@ public class MainActivity extends AppCompatActivity
         } else {
             if(mpA.isPlaying()) {
                 mpA.pause();
+                mpA.seekTo(0);
             }
             if(mpB.isPlaying()) {
                 mpB.pause();
+                mpB.seekTo(0);
             }
             if(mpC.isPlaying()) {
                 mpC.pause();
+                mpC.seekTo(0);
             }
             if(mpD.isPlaying()) {
                 mpD.pause();
+                mpD.seekTo(0);
             }
 
         }
@@ -151,37 +148,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    //starts the bluetooth socket server
-    private void listenButton() {
-        listenButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AcceptThread acceptThread = new AcceptThread();
-                acceptThread.start();
-            }
-        });
-    }
 
-    //method to send data from one device to another
-    @SuppressLint("ClickableViewAccessibility")
-    private void sendSignal() {
-        signalButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        connectedThread.write("100".getBytes());
-                        Log.d("AppInfo", "Button held down");
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                        connectedThread.write("000".getBytes());
-                        return true;
-                }
-                return false;
-            }
-        });
-
-    }
 
     //method that lists all the currently paired devices
     private void listPairedDevices (){
@@ -239,59 +206,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-    }
-
-    //opens a bluetooth socket server
-    private class AcceptThread extends Thread {
-        private final BluetoothServerSocket mmServerSocket;
-
-        public AcceptThread() {
-            // Use a temporary object that is later assigned to mmServerSocket
-            // because mmServerSocket is final.
-            BluetoothServerSocket tmp = null;
-            try {
-                // MY_UUID is the app's UUID string, also used by the client code.
-                tmp = myBluetoothAdapter.listenUsingRfcommWithServiceRecord("DEVICE !",myUUID);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            mmServerSocket = tmp;
-        }
-
-        public void run() {
-            BluetoothSocket socket = null;
-            // Keep listening until exception occurs or a socket is returned.
-            while (true) {
-                try {
-                    socket = mmServerSocket.accept();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    break;
-                }
-
-                if (socket != null) {
-                    // A connection was accepted. Send signal manages the task for the app to do
-                    connectedThread = new ConnectedThread(socket, 1);
-                    connectedThread.start();
-
-                    try {
-                        mmServerSocket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    //break;
-                }
-            }
-        }
-
-        // Closes the connect socket and causes the thread to finish.
-        public void cancel() {
-            try {
-                mmServerSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     //opens a client socket
@@ -447,14 +361,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        // Call this method from the main activity to shut down the connection.
-        public void cancel() {
-            try {
-                mmSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+
     }
 
 

@@ -6,105 +6,113 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/selectNoteTitle2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/switchChoirTitle2"
+        android:layout_width="171dp"
+        android:layout_height="83dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:ems="10"
         android:gravity="center"
-        android:inputType="textPersonName"
-        android:selectAllOnFocus="false"
         android:text="Edit Switches"
-        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        android:typeface="serif"
+        app:fontFamily="serif"
         app:layout_constraintBottom_toTopOf="@+id/editSwitches"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ListView" />
+
+    <TextView
+        android:id="@+id/switchChoirTitle"
+        android:layout_width="185dp"
+        android:layout_height="98dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginLeft="58dp"
+        android:layout_marginTop="49dp"
+        android:layout_marginBottom="22dp"
+        android:gravity="center"
+        android:text="Add Switches"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        android:typeface="serif"
+        app:fontFamily="serif"
+        app:layout_constraintBottom_toTopOf="@+id/showPairedDevicesBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/editSwitches"
-        android:layout_width="0dp"
-        android:layout_height="185dp"
-        android:layout_marginStart="11dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginTop="396dp"
-        android:layout_marginEnd="11dp"
-        android:layout_marginRight="11dp"
+        android:layout_width="476dp"
+        android:layout_height="284dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginLeft="58dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="58dp"
+        android:layout_marginRight="58dp"
+        android:layout_marginBottom="60dp"
         android:background="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/listenBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/switchChoirTitle2" />
 
     <ListView
         android:id="@+id/ListView"
-        android:layout_width="0dp"
-        android:layout_height="185dp"
-        android:layout_marginStart="11dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="11dp"
-        android:layout_marginRight="11dp"
+        android:layout_width="483dp"
+        android:layout_height="242dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginLeft="58dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="58dp"
+        android:layout_marginRight="58dp"
+        android:layout_marginBottom="30dp"
         android:background="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/switchChoirTitle2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/listenBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/showPairedDevicesBtn" />
 
     <Button
         android:id="@+id/showPairedDevicesBtn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="11dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_width="154dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginLeft="58dp"
+        android:layout_marginTop="31dp"
+        android:layout_marginBottom="7dp"
         android:text="Show Paired Devices"
-        app:layout_constraintEnd_toStartOf="@+id/listenBtn"
+        app:layout_constraintBottom_toTopOf="@+id/ListView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/switchChoirTitle" />
 
     <TextView
-        android:id="@+id/isClicked"
-        android:layout_width="0dp"
-        android:layout_height="25dp"
-        android:layout_marginEnd="6dp"
-        android:layout_marginRight="6dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/listenBtn"
+        android:id="@+id/SwitchChoirTitle"
+        android:layout_width="247dp"
+        android:layout_height="178dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="49dp"
+        android:layout_marginEnd="58dp"
+        android:layout_marginRight="58dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="Switch Choir"
+        android:textColor="@color/colorAccent"
+        android:textSize="72sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        app:fontFamily="cursive"
+        app:layout_constraintBottom_toTopOf="@+id/ListView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/listenBtn" />
-
-    <Button
-        android:id="@+id/listenBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Listen"
-        app:layout_constraintEnd_toStartOf="@+id/isClicked"
-        app:layout_constraintStart_toEndOf="@+id/showPairedDevicesBtn"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/signalBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Send Signal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/recieveSignal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="9dp"
-        android:layout_marginRight="9dp"
-        android:layout_marginBottom="56dp"
-        app:layout_constraintBottom_toTopOf="@+id/signalBtn"
-        app:layout_constraintEnd_toStartOf="@+id/signalBtn" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/switchChoirTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>
