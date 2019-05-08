@@ -26,7 +26,7 @@ public class NoteListActivity extends AppCompatActivity {
 
         selectNotes = findViewById(R.id.SelectNotesList);
 
-        ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{"a", "b", "c", "d"});
+        ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{"a", "b", "c", "d", "e", "f", "g"});
         selectNotes.setAdapter(displayNotes);
         ExtractData();
         ChooseNote();
@@ -34,25 +34,20 @@ public class NoteListActivity extends AppCompatActivity {
     }
 
     //method to select what note to play passed on the list view
-    private void ChooseNote(){
+    private void ChooseNote() {
         selectNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 String s = selectNotes.getItemAtPosition(position).toString();
                 g.setCharAtIndex(pos, s.charAt(0));
                 Log.d("AppInfo", "set to  " + s);
                 Log.d("AppInfo", "actually is a " + String.valueOf(g.getCharAtIndex(pos)));
-
-
                 Log.d("AppInfo", "NoteList array is " + Arrays.toString(g.getCharArr()));
-
-
             }
         });
     }
 
-    private void ExtractData(){
+    private void ExtractData() {
         Intent intent = getIntent();
         pos = intent.getIntExtra("sentPos", 0);
         Log.d("AppInfo", "The position being changed is " + pos);

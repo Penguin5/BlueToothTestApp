@@ -2,7 +2,7 @@ package com.example.bluetoothtestapp;
 
 public class Globals {
     private static Globals instance;
-    private static char[] charArray = new char[]{'a','a','a','a','a','a','a'};
+    private static char[] charArray = new char[]{'a', 'a', 'a', 'a', 'a', 'a', 'a'};
 
     private Globals(){}
 
