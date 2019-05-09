@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     //plays the determined note
 
     /**
+     *
      * @param num
      * @param mpA
      * @param mpB
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
      * @param mpD
      * @param c
      */
-    private void playNote(int num, MediaPlayer mpA, MediaPlayer mpB, MediaPlayer mpC, MediaPlayer mpD, MediaPlayer mpE, MediaPlayer mpF, MediaPlayer mpG, char c) {
+    private void playNote(int num, MediaPlayer mpA, MediaPlayer mpB, MediaPlayer mpC, MediaPlayer mpD, MediaPlayer mpE,  MediaPlayer mpF, MediaPlayer mpG, char c) {
 
         if (num == 1) {
             determineNote(c, mpA, mpB, mpC, mpD, mpE, mpF, mpG);
@@ -129,16 +130,16 @@ public class MainActivity extends AppCompatActivity {
                 mpD.seekTo(0);
             }
             if (mpE.isPlaying()) {
-                mpA.pause();
-                mpA.seekTo(0);
+                mpE.pause();
+                mpE.seekTo(0);
             }
             if (mpF.isPlaying()) {
-                mpA.pause();
-                mpA.seekTo(0);
+                mpF.pause();
+                mpF.seekTo(0);
             }
             if (mpG.isPlaying()) {
-                mpA.pause();
-                mpA.seekTo(0);
+                mpG.pause();
+                mpG.seekTo(0);
             }
 
         }
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
     //determines the note to play
     //needs to be edited for multiple devices
-    private void determineNote(char note, MediaPlayer mpA, MediaPlayer mpB, MediaPlayer mpC, MediaPlayer mpD, MediaPlayer mpE, MediaPlayer mpF, MediaPlayer mpG) {
+    private void determineNote(char note, MediaPlayer mpA, MediaPlayer mpB, MediaPlayer mpC, MediaPlayer mpD, MediaPlayer mpE,  MediaPlayer mpF, MediaPlayer mpG) {
         if (note == 'a') {
             mpA.start();
             Log.d("AppInfo", "a is playing");
@@ -372,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("AppInfo", "Playing at an index of " + localI);
                         Log.d("AppInfo", "playing note: " + String.valueOf(charToUse));
 
-                        playNote(tempNum, mpA, mpB, mpC, mpD, mpE, mpF, mpG, charToUse);
+                        playNote(tempNum, mpA, mpB, mpC, mpD,mpE,mpF, mpG, charToUse);
 
 
                     }
