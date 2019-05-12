@@ -47,6 +47,9 @@ public class NoteListActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * method to get the intent from the main Activity
+     */
     private void ExtractData() {
         Intent intent = getIntent();
         pos = intent.getIntExtra("sentPos", 0);
