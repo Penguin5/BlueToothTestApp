@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         private String nameOfDevice;
 
         /**
-         * Constructs a ConnectThread Object
+         * Constructs a new ConnectThread Object
          * @param device the device that is trying to be connected to
          */
         public ConnectThread(BluetoothDevice device) {
