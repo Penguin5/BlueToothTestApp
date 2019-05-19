@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
     Intent intent;
     //bluetooth stuff
     ConnectedThread connectedThread;
-    BluetoothAdapter myBluetoothAdapter
-;
+    BluetoothAdapter myBluetoothAdapter;
     BluetoothDevice[] btArray;
     //media player is for sound
     Context context = this;
@@ -87,89 +86,117 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * handles calling the playNote Method and pausing other notes
-     * @param num the index for the character array
-     * @param mpA the media player for the A note
-     * @param mpB the media player for the B note
-     * @param mpC the media player for the C note
-     * @param mpD the media player for the D note
-     * @param mpE the media player for the E note
-     * @param mpF the media player for the F note
-     * @param mpG the media player for the G note
-     * @param c the character of the note to play
+     *
+     * @param num the number indicating the state of the switch
+     * @param mpA4 the corresponding note in the media player
+     * @param mpA5  the corresponding note in the media player
+     * @param mpASharp4 the corresponding note in the media player
+     * @param mpASharp5 the corresponding note in the media player
+     * @param mpB4 the corresponding note in the media player
+     * @param mpB5 the corresponding note in the media player
+     * @param mpC4 the corresponding note in the media player
+     * @param mpC5 the corresponding note in the media player
+     * @param mpC6 the corresponding note in the media player
+     * @param mpCSharp4 the corresponding note in the media player
+     * @param mpCSharp5 the corresponding note in the media player
+     * @param mpD4 the corresponding note in the media player
+     * @param mpD5 the corresponding note in the media player
+     * @param mpDSharp4 the corresponding note in the media player
+     * @param mpDSharp5 the corresponding note in the media player
+     * @param mpE4 the corresponding note in the media player
+     * @param mpE5 the corresponding note in the media player
+     * @param mpF4 the corresponding note in the media player
+     * @param mpF5 the corresponding note in the media player
+     * @param mpFSharp4 the corresponding note in the media player
+     * @param mpFSharp5 the corresponding note in the media player
+     * @param mpG4 the corresponding note in the media player
+     * @param mpG5 the corresponding note in the media player
+     * @param mpGSharp4 the corresponding note in the media player
+     * @param mpGSharp5 the corresponding note in the media player
+     * @param note the note selected by the user
      */
-    private void determineToPlay(int num, MediaPlayer mpA, MediaPlayer mpB, MediaPlayer mpC, MediaPlayer mpD, MediaPlayer mpE, MediaPlayer mpF, MediaPlayer mpG, char c) {
+    private void determineToPlay(int num, MediaPlayer mpA4,
+                                 MediaPlayer mpA5,
+                                 MediaPlayer mpASharp4,
+                                 MediaPlayer mpASharp5,
+                                 MediaPlayer mpB4,
+                                 MediaPlayer mpB5,
+                                 MediaPlayer mpC4,
+                                 MediaPlayer mpC5,
+                                 MediaPlayer mpC6,
+                                 MediaPlayer mpCSharp4,
+                                 MediaPlayer mpCSharp5,
+                                 MediaPlayer mpD4,
+                                 MediaPlayer mpD5,
+                                 MediaPlayer mpDSharp4,
+                                 MediaPlayer mpDSharp5,
+                                 MediaPlayer mpE4,
+                                 MediaPlayer mpE5,
+                                 MediaPlayer mpF4,
+                                 MediaPlayer mpF5,
+                                 MediaPlayer mpFSharp4,
+                                 MediaPlayer mpFSharp5,
+                                 MediaPlayer mpG4,
+                                 MediaPlayer mpG5,
+                                 MediaPlayer mpGSharp4,
+                                 MediaPlayer mpGSharp5,
+                                 String note) {
 
         if (num == 1) {
-            playNote(c, mpA, mpB, mpC, mpD, mpE, mpF, mpG);
-        } else {
-            if (mpA.isPlaying()) {
-                mpA.pause();
-                mpA.seekTo(0);
+            if (note.equals("a4")) {
+                mpA4.start();
+            } else if (note.equals("a5")) {
+                mpA5.start();
+            } else if (note.equals("a#4")) {
+                mpASharp4.start();
+            } else if (note.equals("a#5")) {
+                mpASharp5.start();
+            } else if (note.equals("b4")) {
+                mpB4.start();
+            } else if (note.equals("b5")) {
+                mpB5.start();
+            } else if (note.equals("c4")) {
+                mpC4.start();
+            } else if (note.equals("c5")) {
+                mpC5.start();
+            } else if (note.equals("c6")) {
+                mpC6.start();
+            } else if (note.equals("c#4")) {
+                mpCSharp4.start();
+            } else if (note.equals("c#5")) {
+                mpCSharp5.start();
+            } else if (note.equals("d4")) {
+                mpD4.start();
+            } else if (note.equals("d5")) {
+                mpD5.start();
+            } else if (note.equals("d#4")) {
+                mpDSharp4.start();
+            } else if (note.equals("d#5")) {
+                mpDSharp5.start();
+            } else if (note.equals("e4")) {
+                mpE4.start();
+            } else if (note.equals("e5")) {
+                mpE5.start();
+            } else if (note.equals("f4")) {
+                mpF4.start();
+            } else if (note.equals("f5")) {
+                mpF5.start();
+            } else if (note.equals("f#4")) {
+                mpFSharp4.start();
+            } else if (note.equals("f#5")) {
+                mpFSharp5.start();
+            } else if (note.equals("g4")) {
+                mpG4.start();
+            } else if (note.equals("g5")) {
+                mpG5.start();
+            } else if (note.equals("g#4")) {
+                mpGSharp4.start();
+            } else if (note.equals("g#5")) {
+                mpGSharp5.start();
             }
-            if (mpB.isPlaying()) {
-                mpB.pause();
-                mpB.seekTo(0);
-            }
-            if (mpC.isPlaying()) {
-                mpC.pause();
-                mpC.seekTo(0);
-            }
-            if (mpD.isPlaying()) {
-                mpD.pause();
-                mpD.seekTo(0);
-            }
-            if (mpE.isPlaying()) {
-                mpE.pause();
-                mpE.seekTo(0);
-            }
-            if (mpF.isPlaying()) {
-                mpF.pause();
-                mpF.seekTo(0);
-            }
-            if (mpG.isPlaying()) {
-                mpG.pause();
-                mpG.seekTo(0);
-            }
-
         }
     }
 
-    /**
-     * determines the note to play based on the character selected and plays it
-     * @param note
-     * @param mpA the media player for the A note
-     * @param mpB the media player for the B note
-     * @param mpC the media player for the C note
-     * @param mpD the media player for the D note
-     * @param mpE the media player for the E note
-     * @param mpF the media player for the F note
-     * @param mpG the media player for the G note
-     */
-    private void playNote(char note, MediaPlayer mpA, MediaPlayer mpB, MediaPlayer mpC, MediaPlayer mpD, MediaPlayer mpE, MediaPlayer mpF, MediaPlayer mpG) {
-        if (note == 'a') {
-            mpA.start();
-            Log.d("AppInfo", "a is playing");
-        } else if (note == 'b') {
-            mpB.start();
-            Log.d("AppInfo", "b is playing");
-        } else if (note == 'c') {
-            mpC.start();
-            Log.d("AppInfo", "c is playing");
-        } else if (note == 'd') {
-            mpD.start();
-            Log.d("AppInfo", "d is playing");
-        } else if (note == 'e') {
-            mpE.start();
-            Log.d("AppInfo", "e is playing");
-        } else if (note == 'f') {
-            mpF.start();
-            Log.d("AppInfo", "f is playing");
-        } else if (note == 'g') {
-            mpG.start();
-            Log.d("AppInfo", "g is playing");
-        }
-    }
 
     /**
      * method that lists all the currently paired devices
@@ -245,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * Constructs a new ConnectThread Object
+         *
          * @param device the device that is trying to be connected to
          */
         public ConnectThread(BluetoothDevice device) {
@@ -318,8 +346,9 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * contructs the connected thread
+         *
          * @param socket the bluetooth socket used for connection
-         * @param num the device number that corresponds to the character array for the notes
+         * @param num    the device number that corresponds to the character array for the notes
          */
         public ConnectedThread(BluetoothSocket socket, int num) {
             mmSocket = socket;
@@ -353,30 +382,66 @@ public class MainActivity extends AppCompatActivity {
 
 
             int tempNum;
-            char charToUse;
+            String stringToUse;
 
-            MediaPlayer mpA;
-            MediaPlayer mpB;
-            MediaPlayer mpC;
-            MediaPlayer mpD;
-            MediaPlayer mpE;
-            MediaPlayer mpF;
-            MediaPlayer mpG;
+            MediaPlayer mpA4;
+            MediaPlayer mpA5;
+            MediaPlayer mpASharp4;
+            MediaPlayer mpASharp5;
+            MediaPlayer mpB4;
+            MediaPlayer mpB5;
+            MediaPlayer mpC4;
+            MediaPlayer mpC5;
+            MediaPlayer mpC6;
+            MediaPlayer mpCSharp4;
+            MediaPlayer mpCSharp5;
+            MediaPlayer mpD4;
+            MediaPlayer mpD5;
+            MediaPlayer mpDSharp4;
+            MediaPlayer mpDSharp5;
+            MediaPlayer mpE4;
+            MediaPlayer mpE5;
+            MediaPlayer mpF4;
+            MediaPlayer mpF5;
+            MediaPlayer mpFSharp4;
+            MediaPlayer mpFSharp5;
+            MediaPlayer mpG4;
+            MediaPlayer mpG5;
+            MediaPlayer mpGSharp4;
+            MediaPlayer mpGSharp5;
 
-            mpA = MediaPlayer.create(context, R.raw.keya);
-            mpA.setLooping(true);
-            mpB = MediaPlayer.create(context, R.raw.keyb);
-            mpB.setLooping(true);
-            mpC = MediaPlayer.create(context, R.raw.keyc);
-            mpC.setLooping(true);
-            mpD = MediaPlayer.create(context, R.raw.keyd);
-            mpD.setLooping(true);
-            mpE = MediaPlayer.create(context, R.raw.keye);
-            mpE.setLooping(true);
-            mpF = MediaPlayer.create(context, R.raw.keyf);
-            mpF.setLooping(true);
-            mpG = MediaPlayer.create(context, R.raw.keyg);
-            mpG.setLooping(true);
+            mpA4 = MediaPlayer.create(context, R.raw.A4Actual);
+            mpA5 = MediaPlayer.create(context, R.raw.A5Actual);
+            mpASharp4 = MediaPlayer.create(context, R.raw.ASharp4Actual);
+            mpASharp5 = MediaPlayer.create(context, R.raw.ASharp5Actual);
+
+            mpB4 = MediaPlayer.create(context, R.raw.B4Actual);
+            mpB5 = MediaPlayer.create(context, R.raw.B5Actual);
+
+            mpC4 = MediaPlayer.create(context, R.raw.C4Actual);
+            mpC5 = MediaPlayer.create(context, R.raw.C5Actual);
+            mpC6 = MediaPlayer.create(context, R.raw.C6Actual);
+            mpCSharp4 = MediaPlayer.create(context, R.raw.CSharp4Actual);
+            mpCSharp5 = MediaPlayer.create(context, R.raw.CSharp5Actual);
+
+            mpD4 = MediaPlayer.create(context, R.raw.D4Actual);
+            mpD5 = MediaPlayer.create(context, R.raw.D5Actual);
+            mpDSharp4 = MediaPlayer.create(context, R.raw.DSharp4Actual);
+            mpDSharp5 = MediaPlayer.create(context, R.raw.DSharp5Actual);
+
+            mpE4 = MediaPlayer.create(context, R.raw.E4Actual);
+            mpE5 = MediaPlayer.create(context, R.raw.E5Actual);
+
+            mpF4 = MediaPlayer.create(context, R.raw.F4Actual);
+            mpF5 = MediaPlayer.create(context, R.raw.F5Actual);
+            mpFSharp4 = MediaPlayer.create(context, R.raw.FSharp4Actual);
+            mpFSharp5 = MediaPlayer.create(context, R.raw.FSharp5Actual);
+
+            mpG4 = MediaPlayer.create(context, R.raw.G4Actual);
+            mpG5 = MediaPlayer.create(context, R.raw.G5Actual);
+            mpGSharp4 = MediaPlayer.create(context, R.raw.GSharp4Actual);
+            mpGSharp5 = MediaPlayer.create(context, R.raw.GSharp5Actual);
+
 
             // Keep listening to the InputStream until an exception occurs.
             while (true) {
@@ -391,12 +456,36 @@ public class MainActivity extends AppCompatActivity {
                         //a bunch of stuff that takes the data and gets numeric value of the first character,
                         // which is either a zero or one
                         tempNum = Character.getNumericValue(new String(buffer, "UTF-8").charAt(0));
-                        charToUse = g.getCharAtIndex(localI);
-                        Log.d("AppInfo", String.valueOf(new String(buffer, "UTF-8").charAt(0)));
+                        stringToUse = g.getStringAtIndex(localI);
+                        Log.d("AppInfo", String.valueOf(new String(buffer, "UTF-8")));
                         Log.d("AppInfo", "Playing at an index of " + localI);
-                        Log.d("AppInfo", "playing note: " + String.valueOf(charToUse));
+                        Log.d("AppInfo", "playing note: " + String.valueOf(stringToUse));
 
-                        determineToPlay(tempNum, mpA, mpB, mpC, mpD,mpE,mpF, mpG, charToUse);
+                        determineToPlay(tempNum, mpA4,
+                                mpA5,
+                                mpASharp4,
+                                mpASharp5,
+                                mpB4,
+                                mpB5,
+                                mpC4,
+                                mpC5,
+                                mpC6,
+                                mpCSharp4,
+                                mpCSharp5,
+                                mpD4,
+                                mpD5,
+                                mpDSharp4,
+                                mpDSharp5,
+                                mpE4,
+                                mpE5,
+                                mpF4,
+                                mpF5,
+                                mpFSharp4,
+                                mpFSharp5,
+                                mpG4,
+                                mpG5,
+                                mpGSharp4,
+                                mpGSharp5, stringToUse);
 
 
                     }
@@ -409,6 +498,7 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * Call this from the main activity to send data to the remote device.
+         *
          * @param bytes the bytes to write
          */
         public void write(byte[] bytes) {

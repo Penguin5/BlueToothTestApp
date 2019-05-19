@@ -26,7 +26,8 @@ public class NoteListActivity extends AppCompatActivity {
 
         selectNotes = findViewById(R.id.SelectNotesList);
 
-        ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{"a", "b", "c", "d", "e", "f", "g"});
+        ArrayAdapter<String> displayNotes = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, new String[]{
+                "a4", "a5", "a#4", "a#5", "b4", "b5", "c4", "c5", "c6", "c#4", "c#5", "d4", "d5", "d#4", "d#5", "e4", "e5", "f4", "f5", "f#4", "f#5", "g4", "g5", "g#4", "g#5",});
         selectNotes.setAdapter(displayNotes);
         ExtractData();
         ChooseNote();
@@ -39,10 +40,10 @@ public class NoteListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String s = selectNotes.getItemAtPosition(position).toString();
-                g.setCharAtIndex(pos, s.charAt(0));
+                g.setStringAtIndex(pos, s);
                 Log.d("AppInfo", "set to  " + s);
-                Log.d("AppInfo", "actually is a " + String.valueOf(g.getCharAtIndex(pos)));
-                Log.d("AppInfo", "NoteList array is " + Arrays.toString(g.getCharArr()));
+                Log.d("AppInfo", "actually is a " + String.valueOf(g.getStringAtIndex(pos)));
+                Log.d("AppInfo", "NoteList array is " + Arrays.toString(g.getStringArr()));
             }
         });
     }
