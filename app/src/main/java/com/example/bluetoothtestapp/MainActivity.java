@@ -410,37 +410,37 @@ public class MainActivity extends AppCompatActivity {
             MediaPlayer mpGSharp4;
             MediaPlayer mpGSharp5;
 
-            mpA4 = MediaPlayer.create(context, R.raw.A4Actual);
-            mpA5 = MediaPlayer.create(context, R.raw.A5Actual);
-            mpASharp4 = MediaPlayer.create(context, R.raw.ASharp4Actual);
-            mpASharp5 = MediaPlayer.create(context, R.raw.ASharp5Actual);
+            mpA4 = MediaPlayer.create(context, R.raw.a4actual);
+            mpA5 = MediaPlayer.create(context, R.raw.a5actual);
+            mpASharp4 = MediaPlayer.create(context, R.raw.asharp4actual);
+            mpASharp5 = MediaPlayer.create(context, R.raw.asharp5actual);
 
-            mpB4 = MediaPlayer.create(context, R.raw.B4Actual);
-            mpB5 = MediaPlayer.create(context, R.raw.B5Actual);
+            mpB4 = MediaPlayer.create(context, R.raw.b4actual);
+            mpB5 = MediaPlayer.create(context, R.raw.b5actual);
 
-            mpC4 = MediaPlayer.create(context, R.raw.C4Actual);
-            mpC5 = MediaPlayer.create(context, R.raw.C5Actual);
-            mpC6 = MediaPlayer.create(context, R.raw.C6Actual);
-            mpCSharp4 = MediaPlayer.create(context, R.raw.CSharp4Actual);
-            mpCSharp5 = MediaPlayer.create(context, R.raw.CSharp5Actual);
+            mpC4 = MediaPlayer.create(context, R.raw.c4actual);
+            mpC5 = MediaPlayer.create(context, R.raw.c5actual);
+            mpC6 = MediaPlayer.create(context, R.raw.c6actual);
+            mpCSharp4 = MediaPlayer.create(context, R.raw.csharp4actual);
+            mpCSharp5 = MediaPlayer.create(context, R.raw.csharp5actual);
 
-            mpD4 = MediaPlayer.create(context, R.raw.D4Actual);
-            mpD5 = MediaPlayer.create(context, R.raw.D5Actual);
-            mpDSharp4 = MediaPlayer.create(context, R.raw.DSharp4Actual);
-            mpDSharp5 = MediaPlayer.create(context, R.raw.DSharp5Actual);
+            mpD4 = MediaPlayer.create(context, R.raw.d4actual);
+            mpD5 = MediaPlayer.create(context, R.raw.d5ectual);
+            mpDSharp4 = MediaPlayer.create(context, R.raw.dsharp4actual);
+            mpDSharp5 = MediaPlayer.create(context, R.raw.dsharp5actual);
 
-            mpE4 = MediaPlayer.create(context, R.raw.E4Actual);
-            mpE5 = MediaPlayer.create(context, R.raw.E5Actual);
+            mpE4 = MediaPlayer.create(context, R.raw.e4actual);
+            mpE5 = MediaPlayer.create(context, R.raw.e5actual);
 
-            mpF4 = MediaPlayer.create(context, R.raw.F4Actual);
-            mpF5 = MediaPlayer.create(context, R.raw.F5Actual);
-            mpFSharp4 = MediaPlayer.create(context, R.raw.FSharp4Actual);
-            mpFSharp5 = MediaPlayer.create(context, R.raw.FSharp5Actual);
+            mpF4 = MediaPlayer.create(context, R.raw.f4actual);
+            mpF5 = MediaPlayer.create(context, R.raw.f5actual);
+            mpFSharp4 = MediaPlayer.create(context, R.raw.fsharp4actual);
+            mpFSharp5 = MediaPlayer.create(context, R.raw.fsharp5actual);
 
-            mpG4 = MediaPlayer.create(context, R.raw.G4Actual);
-            mpG5 = MediaPlayer.create(context, R.raw.G5Actual);
-            mpGSharp4 = MediaPlayer.create(context, R.raw.GSharp4Actual);
-            mpGSharp5 = MediaPlayer.create(context, R.raw.GSharp5Actual);
+            mpG4 = MediaPlayer.create(context, R.raw.g4actual);
+            mpG5 = MediaPlayer.create(context, R.raw.g5actual);
+            mpGSharp4 = MediaPlayer.create(context, R.raw.gsharp4actual);
+            mpGSharp5 = MediaPlayer.create(context, R.raw.gsharp5actual);
 
 
             // Keep listening to the InputStream until an exception occurs.

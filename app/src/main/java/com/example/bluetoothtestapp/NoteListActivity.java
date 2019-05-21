@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.Arrays;
@@ -15,7 +16,7 @@ public class NoteListActivity extends AppCompatActivity {
     ListView selectNotes;
     int pos;
     Globals g;
-
+    Button pauseBTN;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +24,7 @@ public class NoteListActivity extends AppCompatActivity {
 
         //initializing globals
         g = Globals.getInstance();
+        pauseBTN = findViewById(R.id.muteBtn);
 
         selectNotes = findViewById(R.id.SelectNotesList);
 
@@ -31,9 +33,19 @@ public class NoteListActivity extends AppCompatActivity {
         selectNotes.setAdapter(displayNotes);
         ExtractData();
         ChooseNote();
-
+        pause();
     }
 
+    private void pause() {
+        pauseBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              g.setStringAtIndex(pos, "pause");
+                Log.d("AppInfo", "actually is a " + String.valueOf(g.getStringAtIndex(pos)));
+                Log.d("AppInfo", "NoteList array is " + Arrays.toString(g.getStringArr()));
+            }
+        });
+    }
     //method to select what note to play passed on the list view
     private void ChooseNote() {
         selectNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
